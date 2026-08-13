@@ -1,6 +1,6 @@
 <template>
   <div class="modal-overlay">
-    <div class="modal-box" role="dialog" aria-modal="true">
+    <div class="modal-box" ref="modalBoxRef" role="dialog" aria-modal="true">
       <h2 class="modal-title">{{ props.mode === 'add' ? 'Add Recipient' : 'Edit Recipient' }}</h2>
       <form @submit.prevent="handleSubmit" class="modal-form">
         <div class="form-field">
@@ -42,7 +42,7 @@
           <button type="submit" class="btn btn--primary">
             {{ props.mode === 'add' ? 'Add Recipient' : 'Save Changes' }}
           </button>
-          <button type="button" class="btn btn--ghost" @click="emit('close')">Cancel</button>
+          <button type="button" class="btn btn--ghost" @click="closeModal">Cancel</button>
         </div>
       </form>
     </div>
@@ -50,7 +50,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, onMounted, nextTick } from 'vue'
+import { ref, reactive, watch, onMounted, onUnmounted, nextTick } from 'vue'
 import { useRecipientsStore } from '../stores/recipients.js'
 
 const props = defineProps({
@@ -62,6 +62,7 @@ const emit = defineEmits(['close'])
 
 const store = useRecipientsStore()
 const firstFieldRef = ref(null)
+const modalBoxRef = ref(null)
 
 const formData = reactive({ name: '', email: '', company: '', status: 'active' })
 const errors = reactive({ name: '', email: '' })
@@ -84,9 +85,49 @@ watch(
   { immediate: true }
 )
 
+function getFocusableElements() {
+  if (!modalBoxRef.value) return []
+  return Array.from(
+    modalBoxRef.value.querySelectorAll(
+      'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )
+  )
+}
+
+function closeModal() {
+  emit('close')
+}
+
+function trapFocus(event) {
+  if (event.key === 'Escape') {
+    closeModal()
+    return
+  }
+  if (event.key !== 'Tab') return
+  const focusableElements = getFocusableElements()
+  if (focusableElements.length === 0) return
+  const firstFocusableElement = focusableElements[0]
+  const lastFocusableElement = focusableElements[focusableElements.length - 1]
+
+  if (event.shiftKey) {
+    if (document.activeElement === firstFocusableElement) {
+      event.preventDefault()
+      lastFocusableElement.focus()
+    }
+  } else if (document.activeElement === lastFocusableElement) {
+    event.preventDefault()
+    firstFocusableElement.focus()
+  }
+}
+
 onMounted(async () => {
   await nextTick()
   firstFieldRef.value?.focus()
+  document.addEventListener('keydown', trapFocus)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', trapFocus)
 })
 
 function validateForm() {
