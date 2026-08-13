@@ -1,13 +1,15 @@
 <template>
-  <div v-if="store.selectedIds.size > 0">
-    <span>{{ store.selectedIds.size }} selected</span>
-    <button @click="handleBulkDelete">Delete Selected</button>
-    <select v-model="pendingStatus">
-      <option value="active">Active</option>
-      <option value="at-risk">At Risk</option>
-      <option value="inactive">Inactive</option>
-    </select>
-    <button @click="handleBulkStatusUpdate">Apply Status</button>
+  <div v-if="store.selectedIds.size > 0" class="bulk-actions-bar">
+    <span class="selection-count">{{ store.selectedIds.size }} selected</span>
+    <button class="btn btn--danger" @click="handleBulkDelete">Delete Selected</button>
+    <div class="status-update">
+      <select v-model="pendingStatus" class="status-select">
+        <option value="active">Active</option>
+        <option value="at-risk">At Risk</option>
+        <option value="inactive">Inactive</option>
+      </select>
+      <button class="btn btn--secondary" @click="handleBulkStatusUpdate">Apply Status</button>
+    </div>
   </div>
 </template>
 
@@ -28,3 +30,54 @@ function handleBulkStatusUpdate() {
   store.bulkUpdateStatus(pendingStatus.value)
 }
 </script>
+
+<style lang="scss" scoped>
+@use '../styles/variables' as *;
+
+.bulk-actions-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: $space-3;
+  margin-top: $space-4;
+  padding: $space-3 $space-4;
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  border-radius: $radius;
+}
+
+.selection-count {
+  font-size: $font-size-sm;
+  font-weight: 600;
+  color: $color-primary;
+  margin-right: $space-1;
+}
+
+.status-update {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  margin-left: auto;
+}
+
+.btn--danger {
+  background-color: $color-danger;
+  color: #fff;
+  border-color: $color-danger;
+
+  &:hover {
+    background-color: $color-danger-hover;
+    border-color: $color-danger-hover;
+  }
+}
+
+.btn--secondary {
+  background-color: $color-surface;
+  color: $color-text;
+  border-color: $color-border;
+
+  &:hover {
+    background-color: $color-bg;
+  }
+}
+</style>

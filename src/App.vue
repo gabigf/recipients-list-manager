@@ -1,8 +1,10 @@
 <template>
   <main>
     <h1>Recipients List Manager</h1>
-    <button @click="openAddModal">Add Recipient</button>
-    <SearchBar />
+    <div class="app-toolbar">
+      <button class="btn-add" @click="openAddModal">Add Recipient</button>
+      <SearchBar />
+    </div>
     <RecipientList @edit="openEditModal" />
     <BulkActionsBar />
     <RecipientFormModal
@@ -52,7 +54,41 @@ function closeModal() {
 </script>
 
 <style lang="scss">
+@use './styles/variables' as *;
+
 main {
-  padding: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: $space-8 $space-6;
+}
+
+h1 {
+  font-size: $font-size-2xl;
+  font-weight: 700;
+  margin: 0 0 $space-6;
+}
+
+.app-toolbar {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+  margin-bottom: $space-6;
+
+  @media (max-width: 480px) {
+    align-items: flex-end;
+  }
+}
+
+.btn-add {
+  flex-shrink: 0;
+  white-space: nowrap;
+  background-color: $color-primary;
+  color: #fff;
+  border-color: $color-primary;
+
+  &:hover {
+    background-color: $color-primary-hover;
+    border-color: $color-primary-hover;
+  }
 }
 </style>
