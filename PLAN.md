@@ -25,10 +25,10 @@
 ## Component tree
 
 - `App.vue`: layout shell
-- `RecipientList.vue`: table, row checkboxes, select-all; scrolls horizontally on narrow viewports
+- `RecipientList.vue`: table, row checkboxes, select-all; scrolls horizontally on narrow viewports; delete confirms via `window.confirm()` before calling `deleteRecipient`
 - `RecipientFormModal.vue`: single lightweight modal, reused for add and edit (just the four fields: name, email, company, status)
 - `SearchBar.vue`: filters by name/email
-- `BulkActionsBar.vue`: appears when selections exist; bulk delete / bulk status change
+- `BulkActionsBar.vue`: appears when selections exist; bulk delete / bulk status change; bulk delete confirms via `window.confirm()` before calling `bulkDelete`
 - `store/recipients.js`: Pinia store: state, filtered getter, CRUD + bulk actions
 
 Modal open/closed state and which recipient (if any) is being edited are local UI state, kept in `App.vue` rather than the Pinia store, to keep the store scoped to domain data.
@@ -36,14 +36,17 @@ Modal open/closed state and which recipient (if any) is being edited are local U
 ## State shape & actions (Pinia store)
 
 **State**
+
 - `recipients`: array of recipient objects
 - `searchQuery`: string
 - `selectedIds`: Set of selected recipient ids
 
 **Getters**
+
 - `filteredRecipients`: recipients filtered by `searchQuery` against name/email
 
 **Actions**
+
 - `addRecipient(data)`
 - `updateRecipient(id, data)`
 - `deleteRecipient(id)`
@@ -79,12 +82,14 @@ Modal open/closed state and which recipient (if any) is being edited are local U
 ## Testing
 
 **Store test, `filteredRecipients`**
+
 1. Returns all recipients when `searchQuery` is empty
 2. Filters by partial, case-insensitive match on name
 3. Filters by partial, case-insensitive match on email
 4. Returns an empty array when nothing matches
 
 **Component test, `RecipientFormModal.vue`**
+
 1. Pre-fills fields correctly when opened in edit mode with an existing recipient
 2. Renders empty fields when opened in add mode
 3. Blocks submission and shows an error when a required field is empty
@@ -92,7 +97,7 @@ Modal open/closed state and which recipient (if any) is being edited are local U
 
 ## Decisions & trade-offs log
 
-*(I'll append to this as I build: it becomes the basis for the README's assumptions and trade-offs section.)*
+_(I'll append to this as I build: it becomes the basis for the README's assumptions and trade-offs section.)_
 
 - **State management:** Used Pinia for the recipients store. For an app of this size I'd typically reach for a composable, but chose Pinia here to reflect the stack this role works in day to day.
 - **Persistence:** `localStorage` stands in for a backend. In production this would be API calls with optimistic updates and loading/error states.
