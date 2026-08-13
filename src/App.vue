@@ -4,6 +4,7 @@
     <button @click="openAddModal">Add Recipient</button>
     <SearchBar />
     <RecipientList @edit="openEditModal" />
+    <BulkActionsBar />
     <RecipientFormModal
       v-if="isModalOpen"
       :mode="modalMode"
@@ -18,6 +19,7 @@ import { ref } from 'vue';
 import RecipientList from './components/RecipientList.vue';
 import RecipientFormModal from './components/RecipientFormModal.vue';
 import SearchBar from './components/SearchBar.vue';
+import BulkActionsBar from './components/BulkActionsBar.vue';
 import { useRecipientsStore } from './stores/recipients.js';
 
 const store = useRecipientsStore();
