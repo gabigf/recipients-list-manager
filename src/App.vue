@@ -2,6 +2,7 @@
   <main>
     <h1>Recipients List Manager</h1>
     <button @click="openAddModal">Add Recipient</button>
+    <SearchBar />
     <RecipientList @edit="openEditModal" />
     <RecipientFormModal
       v-if="isModalOpen"
@@ -16,6 +17,7 @@
 import { ref } from 'vue';
 import RecipientList from './components/RecipientList.vue';
 import RecipientFormModal from './components/RecipientFormModal.vue';
+import SearchBar from './components/SearchBar.vue';
 import { useRecipientsStore } from './stores/recipients.js';
 
 const store = useRecipientsStore();

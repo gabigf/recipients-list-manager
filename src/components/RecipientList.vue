@@ -35,6 +35,12 @@
             <button @click="confirmDelete(recipient)">Delete</button>
           </td>
         </tr>
+        <tr v-if="store.filteredRecipients.length === 0 && store.recipients.length === 0">
+          <td colspan="6">No recipients yet.</td>
+        </tr>
+        <tr v-else-if="store.filteredRecipients.length === 0">
+          <td colspan="6">No recipients match your search.</td>
+        </tr>
       </tbody>
     </table>
   </div>
