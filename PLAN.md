@@ -95,6 +95,11 @@ Modal open/closed state and which recipient (if any) is being edited are local U
 3. Blocks submission and shows an error when a required field is empty
 4. Blocks submission and shows an error for an invalid email format
 
+**Component test, `RecipientList.vue`**
+
+1. Calls `deleteRecipient` when the confirm dialog is accepted
+2. Does not call `deleteRecipient` when the confirm dialog is canceled
+
 ## Decisions & trade-offs log
 
 _(I'll append to this as I build: it becomes the basis for the README's assumptions and trade-offs section.)_
