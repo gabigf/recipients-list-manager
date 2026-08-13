@@ -39,11 +39,17 @@ function handleBulkStatusUpdate() {
   align-items: center;
   flex-wrap: wrap;
   gap: $space-3;
-  margin-top: $space-4;
+  position: fixed;
+  bottom: $space-6;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 40;
+  max-width: calc(100vw - #{$space-6 * 2});
   padding: $space-3 $space-4;
-  background: #EFF6FF;
+  background: $color-surface;
   border: 1px solid #BFDBFE;
-  border-radius: $radius;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-lg;
 }
 
 .selection-count {
