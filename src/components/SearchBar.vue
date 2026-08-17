@@ -9,6 +9,18 @@
       placeholder="Filter by name or email"
       @input="store.searchQuery = $event.target.value"
     />
+    <label class="status-filter-label" for="status-filter-select">Status</label>
+    <select
+      id="status-filter-select"
+      class="status-filter-select"
+      :value="store.statusFilter"
+      @change="store.statusFilter = $event.target.value"
+    >
+      <option value="">All Statuses</option>
+      <option value="active">Active</option>
+      <option value="at-risk">At Risk</option>
+      <option value="inactive">Inactive</option>
+    </select>
   </div>
 </template>
 
@@ -50,5 +62,16 @@ const store = useRecipientsStore()
     max-width: none;
     margin-right: 0;
   }
+}
+
+.status-filter-label {
+  font-size: $font-size-sm;
+  font-weight: 500;
+  color: $color-text-secondary;
+  white-space: nowrap;
+}
+
+.status-filter-select {
+  flex-shrink: 0;
 }
 </style>

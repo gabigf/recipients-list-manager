@@ -18,18 +18,22 @@ export const useRecipientsStore = defineStore('recipients', {
   state: () => ({
     recipients: loadFromStorage() ?? [...seedData],
     searchQuery: '',
+    statusFilter: '',
     selectedIds: new Set(),
   }),
 
   getters: {
     filteredRecipients(state) {
-      if (!state.searchQuery.trim()) return state.recipients;
-      const query = state.searchQuery.toLowerCase();
-      return state.recipients.filter(
-        (recipient) =>
+      const query = state.searchQuery.trim().toLowerCase();
+      return state.recipients.filter((recipient) => {
+        const matchesQuery =
+          !query ||
           recipient.name.toLowerCase().includes(query) ||
-          recipient.email.toLowerCase().includes(query),
-      );
+          recipient.email.toLowerCase().includes(query);
+        const matchesStatus =
+          !state.statusFilter || recipient.status === state.statusFilter;
+        return matchesQuery && matchesStatus;
+      });
     },
   },
 
