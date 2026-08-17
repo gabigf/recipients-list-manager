@@ -36,4 +36,26 @@ describe('filteredRecipients', () => {
     store.searchQuery = 'zzznomatch'
     expect(store.filteredRecipients).toEqual([])
   })
+
+  it('returns all recipients when statusFilter is empty', () => {
+    store.statusFilter = ''
+    expect(store.filteredRecipients).toEqual(TEST_RECIPIENTS)
+  })
+
+  it('filters by statusFilter', () => {
+    store.statusFilter = 'at-risk'
+    expect(store.filteredRecipients).toEqual([TEST_RECIPIENTS[1]])
+  })
+
+  it('combines searchQuery and statusFilter', () => {
+    store.searchQuery = 'a'
+    store.statusFilter = 'inactive'
+    expect(store.filteredRecipients).toEqual([TEST_RECIPIENTS[2]])
+  })
+
+  it('returns an empty array when searchQuery and statusFilter match different recipients', () => {
+    store.searchQuery = 'alice'
+    store.statusFilter = 'inactive'
+    expect(store.filteredRecipients).toEqual([])
+  })
 })
